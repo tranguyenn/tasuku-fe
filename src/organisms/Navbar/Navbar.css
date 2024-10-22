@@ -1,0 +1,16 @@
+.nav-container {
+  background-color: #fff;
+}
+.nav-appbar {
+  background-color: #fff !important;
+}
+.nav-flex {
+  display: flex;
+  flex-direction: row;
+}
+.nav-flex-container {
+  width: 100%!important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,12 @@
+.tittle-container{
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #b5b5b5;
+    font-weight: bold;
+}
+#icon{
+    font-size: 12px ;
+    margin-right: 5px;
+}

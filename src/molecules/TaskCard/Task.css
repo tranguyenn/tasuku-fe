@@ -1,0 +1,11 @@
+.onDrag{
+    background-color: transparent;
+    transition: all 1s;
+}
+.editEffect{
+    transition: all .75s ease;
+}
+.editEffect:hover{
+    background-color: black!important;
+    color: white!important;
+}

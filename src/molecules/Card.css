@@ -1,0 +1,52 @@
+.card-container {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+  min-height: max-content !important;
+  transform: none !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  transition: all .5s;
+}
+.card-container:hover {
+  cursor: pointer;
+  -webkit-box-shadow: 2px 1px 103px 12px rgba(191, 187, 191, 1);
+  -moz-box-shadow: 2px 1px 103px 12px rgba(191, 187, 191, 1);
+  box-shadow: 2px 1px 103px 12px rgba(191, 187, 191, 1);
+}
+.card-media {
+  border-radius: 3px;
+  object-fit: cover;
+  object-position: center;
+}
+.card-title {
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 500 !important;
+  text-align: left;
+  padding-top: 10px;
+}
+
+.card-avatar-group {
+  justify-content: flex-end;
+}
+.surplus-fix {
+  background-color: aquamarine;
+  padding-left: 10px;
+}
+.people-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.people-more {
+  font-size: 12px !important;
+  color: gray;
+}
+.cardEffect{
+  border-radius: 14px!important;
+  transition: all 0.1s ease;
+  box-shadow: 13px 13px 0px -5px rgba(29, 29, 29, 0.068)!important;
+}
+

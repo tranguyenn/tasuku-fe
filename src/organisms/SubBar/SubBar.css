@@ -1,0 +1,12 @@
+.buttonStyle{
+    margin-right: 15px;
+}
+.buttonHover{
+    transition: all .75s ease-in;
+    margin-right: 10px!important;
+}
+.buttonHover:hover{
+    background-color: aliceblue;
+    border:1px solid black;
+    color:black
+}
