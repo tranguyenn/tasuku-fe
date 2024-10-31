@@ -8,28 +8,50 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Grid2, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-export default function FormDialog({ handleClose, open }) {
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { addMemberToBoard } from "../../features/task/taskSlice";
+import FTextField from "../form/FTextField";
+
+const yupSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+});
+
+export default function FormDialog({ handleClose, open, boardId }) {
+  const methods = useForm({
+    resolver: yupResolver(yupSchema),
+  });
+  const {
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
+
+  const dispatch = useDispatch();
+  const onSubmit = (data) => {
+    console.log("submit dialog", boardId);
+    const email=data.email;
+    dispatch(addMemberToBoard({boardId,email})).then(() => reset());
+  };
   return (
     <React.Fragment>
       <Dialog
         open={open}
         onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
-            handleClose();
-          },
-        }}
         fullWidth
         maxWidth="md"
-        
       >
-        <Grid2 container alignItems="center" justifyContent="space-between" sx={{paddingRight:2}}>
+        <Grid2
+          container
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ paddingRight: 2 }}
+        >
           <DialogTitle sx={{ fontWeight: "bold" }}>
             Invite to Workspace
           </DialogTitle>
@@ -37,8 +59,10 @@ export default function FormDialog({ handleClose, open }) {
             <CloseIcon sx={{ color: "black" }} />
           </IconButton>
         </Grid2>
-        <DialogContent>
-          <TextField
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <DialogContent>
+              {/* <TextField
             autoFocus
             required
             margin="dense"
@@ -50,12 +74,34 @@ export default function FormDialog({ handleClose, open }) {
             variant="outlined"
             color="black"
             sx={{ borderColor: "black", color: "black" }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} sx={{color:"black"}}>Cancel</Button>
-          <Button type="submit" variant="contained" sx={{backgroundColor:"black"}}>Invite</Button>
-        </DialogActions>
+          /> */}
+              <FTextField
+                name="email"
+                multiline
+                fullWidth
+                rows={1}
+                placeholder="Enter email"
+                sx={{
+                  "& fieldset": {
+                    borderWidth: `1px !important`,
+                  },
+                }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} sx={{ color: "black" }}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ backgroundColor: "black" }}
+              >
+                Invite
+              </Button>
+            </DialogActions>
+          </form>
+        </FormProvider>
       </Dialog>
     </React.Fragment>
   );

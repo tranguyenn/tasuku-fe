@@ -8,7 +8,23 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { Box, CardMedia, Container, Grid2, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  CardMedia,
+  Container,
+  Grid2,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import FUploadImage from "../form/FUploadImage";
+import { createTak, createTask } from "../../features/task/taskSlice";
+import FTextField from "../form/FTextField";
+import { LoadingButton } from "@mui/lab";
+import { useSelector } from "react-redux";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -18,8 +34,53 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
-export default function TaskDialog({ handleClose, handleClickOpen, open }) {
+const yupSchema = Yup.object().shape({
+  name: Yup.string().required("Task name is required"),
+  description: Yup.string().required("Description is required"),
+});
+export default function TaskDialog({
+  handleClose,
+  handleClickOpen,
+  open,
+  boardId,
+}) {
+  const methods = useForm({
+    resolver: yupResolver(yupSchema),
+  });
+  const { isLoading } = useSelector((state) => state.task);
+  const {
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { isSubmitting },
+  } = methods;
+  const dispatch = useDispatch();
+  const handleDrop = React.useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      console.log(acceptedFiles);
+      if (file) {
+        setValue(
+          "image",
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        );
+      }
+    },
+    [setValue]
+  );
+  const onSubmit = (data) => {
+    console.log("submit",data)
+    const content = {
+      name: data.name,
+      description: data.description,
+      status: "pending", 
+      cover: data.image,
+      board: boardId,
+    };
+    dispatch(createTask(content)).then(() => reset());
+  };
   return (
     <React.Fragment>
       <BootstrapDialog
@@ -43,53 +104,67 @@ export default function TaskDialog({ handleClose, handleClickOpen, open }) {
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
-          {/* <Box sx={{flexGrow:1}}>
-            
-                <img alt="thumbnail" src="https://picsum.photos/1920/1080" height={220} width="100%" style={{borderRadius:"16px"}}/>
-            
-          </Box> */}
-          <Box>
-            <Grid2>
-              <Box
-                sx={{
-                  width: "100%",
-                  height: 200,
-                  border: "1px dashed black",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "16px",
-                  marginBottom: 4,
-                  marginTop: 5,
-                }}
-              >
-                <Typography variant="h3">Drop Image</Typography>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <DialogContent dividers>
+              <Box>
+                <Grid2>
+                  <Box
+                    sx={{
+                      mt: 20,
+                      width: "100%",
+                      height: 250,
+                      border: "1px dashed black",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: "16px",
+                      marginBottom: 4,
+                      marginTop: 5,
+                    }}
+                  >
+                    <FUploadImage
+                      name="image"
+                      accept="image/*"
+                      maxSize={3145728}
+                      onDrop={handleDrop}
+                    />
+                  </Box>
+                  <Stack spacing={4}>
+                    <FTextField
+                      id="outlined-basic"
+                      name="name"
+                      label="Task Name"
+                      variant="outlined"
+                      color="black"
+                      fullWidth
+                    />
+                    <FTextField
+                      id="outlined-basic"
+                      multiline
+                      fullWidth
+                      rows={4}
+                      name="description"
+                      label="Description"
+                      variant="outlined"
+                      color="black"
+                    />
+                  </Stack>
+                </Grid2>
               </Box>
-              <Stack spacing={4}>
-                <TextField
-                  id="outlined-basic"
-                  label="Task Name"
-                  variant="outlined"
-                  color="black"
-                  fullWidth
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Desciption"
-                  variant="outlined"
-                  color="black"
-                  fullWidth
-                />
-              </Stack>
-            </Grid2>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" autoFocus onClick={handleClose} sx={{backgroundColor:"black"}}>
-            Save changes
-          </Button>
-        </DialogActions>
+            </DialogContent>
+            <DialogActions>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                size="small"
+                loading={isSubmitting || isLoading}
+              >
+                Create
+              </LoadingButton>
+            </DialogActions>
+          </form>
+        </FormProvider>
       </BootstrapDialog>
     </React.Fragment>
   );

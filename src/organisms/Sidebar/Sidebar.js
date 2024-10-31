@@ -18,12 +18,33 @@ import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AddIcon from "@mui/icons-material/Add";
 import FormDialog from "../AddTeamMember/Dialog";
+import { shallowEqual, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getBoardName } from "../../features/board/boardSlice";
 
-export default function Sidebar() {
+export default function Sidebar({ boardId }) {
   const [state, setState] = React.useState({
     right: false,
   });
+  const [boardInfo, setBoardInfo] = React.useState();
+  const { sideBarBoard } = useSelector(
+    (state) => ({
+      sideBarBoard: state.board.sideBarBoard,
+    }),
+    shallowEqual
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (boardId) dispatch(getBoardName({ boardId }));
+  }, [boardId, dispatch]);
 
+  useEffect(() => {
+    if (sideBarBoard) {
+      setBoardInfo(sideBarBoard);
+    }
+  }, [sideBarBoard]);
+  console.log("side bar", boardInfo);
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -80,14 +101,14 @@ export default function Sidebar() {
           <Avatar alt="Remy Sharp" variant="rounded" src="../people-1.jpg" />
           <Grid2 direction="row">
             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              Username
+              {boardInfo?.creator.name}
             </Typography>
             <Typography
               variant="caption"
               sx={{ fontStyle: "italic" }}
               gutterBottom
             >
-              @Username
+              {boardInfo?.creator.email}
             </Typography>
           </Grid2>
         </Grid2>
@@ -101,9 +122,7 @@ export default function Sidebar() {
         </Stack>
         <Grid2 sx={{ marginTop: 1 }} container spacing={2} alignItems="center">
           <Typography variant="body2" align="justify">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda,
-            unde nostrum numquam blanditiis sit architecto doloribus dolor non
-            quo laudantium.
+            {boardInfo?.description}
           </Typography>
         </Grid2>
       </Box>
@@ -115,33 +134,39 @@ export default function Sidebar() {
               Team
             </Typography>
           </Stack>
-          <IconButton sx={{color:"black"}} onClick={handleClickOpen}>
+          <IconButton sx={{ color: "black" }} onClick={handleClickOpen}>
             <AddIcon />
           </IconButton>
         </Grid2>
 
-        <Grid2
-          sx={{ marginTop: 1 }}
-          container
-          spacing={2}
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Grid2 container alignItems="center" spacing={1}>
-            <Avatar
-              alt="Remy Sharp"
-              variant="rounded"
-              src="../people-1.jpg"
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-              Username
-            </Typography>
-          </Grid2>
-          <Typography variant="body2"> Admin</Typography>
-        </Grid2>
+        {boardInfo?.users?.map((user) => {
+          return (
+            <>
+              <Grid2
+                sx={{ marginTop: 1 }}
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Grid2 container alignItems="center" spacing={1}>
+                  <Avatar
+                    alt={user.name}
+                    variant="rounded"
+                    src={user.avatar}
+                    sx={{ width: 32, height: 32 }}
+                  />
+                  <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                    {user.name}
+                  </Typography>
+                </Grid2>
+                <Typography variant="body2"> {user._id==boardInfo?.creator._id?"Admin":"Member"}</Typography>
+              </Grid2>
+            </>
+          );
+        })}
       </Box>
-      <FormDialog handleClose={handleClose} open={open}/>
+      <FormDialog handleClose={handleClose} open={open} boardId={boardId} />
     </Box>
   );
 

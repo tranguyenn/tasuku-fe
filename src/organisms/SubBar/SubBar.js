@@ -4,11 +4,33 @@ import Button from "@mui/material/Button";
 import { Avatar, Box, Grid2, Paper, styled } from "@mui/material";
 import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import { deepOrange, green } from "@mui/material/colors";
+import { deepOrange, green, grey } from "@mui/material/colors";
 import "./SubBar.css";
 import Sidebar from "../Sidebar/Sidebar";
+import { shallowEqual, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getBoardName } from "../../features/board/boardSlice";
 
-export default function SubBar() {
+export default function SubBar({boardId}) {
+  const [boardMemberList, setBoardMemberList] = React.useState([]);
+  const { boardMemeber } = useSelector(
+    (state) => ({
+      boardMemeber: state.board.boardMemeber,
+    }),
+    shallowEqual
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (boardId) dispatch(getBoardName({ boardId }));
+  }, [boardId, dispatch]);
+
+  useEffect(() => {
+    if (boardMemeber) {
+      setBoardMemberList(boardMemeber);
+    }
+  }, [boardMemeber]);
+  console.log("board member", boardMemberList);
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: "#fff",
     ...theme.typography.body2,
@@ -40,14 +62,18 @@ export default function SubBar() {
             <PublicOutlinedIcon />
             Public
           </Button>
-          <Avatar
-            sx={{ bgcolor: green[500] }}
+          {boardMemberList?.map(m=>(
+            <Avatar
+            sx={{ bgcolor: grey[500],  marginRight: "5px" }}
+
             variant="rounded"
-            src="https://picsum.photos/200"
+            src={m.avatar}
           ></Avatar>
+          ))}
+          
         </Grid2>
         <Grid2 size={7} display={"flex"} justifyContent={"flex-end"}>
-          <Sidebar/>
+          <Sidebar boardId={boardId}/>
         </Grid2>
       </Grid2>
     </Box>

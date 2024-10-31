@@ -9,9 +9,10 @@ import CardActions from "@mui/material/CardActions";
 import "./Card.css";
 import { Avatar, AvatarGroup } from "@mui/material";
 
-export default function BoardCard({ boardId, content, boardName }) {
+export default function BoardCard({ boardId, content, boardName, users }) {
+  console.log("check user",users)
   return (
-    <Card sx={{ maxWidth: 345 }} className="cardEffect">
+    <Card sx={{ maxWidth: 350, minWidth: 250, width: "100%"}}  className="cardEffect">
       <CardActionArea href={`/board-detail/${boardId}`}>
         <div style={{ padding: "15px", paddingBottom: 0 }}>
           <CardMedia
@@ -24,11 +25,17 @@ export default function BoardCard({ boardId, content, boardName }) {
         </div>
 
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div" align="left">
-            Board {boardId} {boardName}
+          <Typography gutterBottom variant="h5" component="div" align="left"  sx={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              WebkitLineClamp: 1,
+            }}>
+           {boardName}
           </Typography>
           <Typography
             variant="body2"
+            align="left"
             sx={{
               color: "text.secondary",
               whiteSpace: "nowrap",
@@ -52,12 +59,11 @@ export default function BoardCard({ boardId, content, boardName }) {
           >
             Join
           </Button>
+           
           <AvatarGroup max={4}>
-            <Avatar alt="Remy Sharp" src="../people-1.jpg" />
-            <Avatar alt="Travis Howard" src="../people-2.jpg" />
-            <Avatar alt="Cindy Baker" src="../people-3.jpg" />
-            <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-            <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+          {users?.map(user=>(
+            <Avatar alt={user.name} src={user.avatar}/>
+          ))}
           </AvatarGroup>
         </CardActions>
       </CardActionArea>

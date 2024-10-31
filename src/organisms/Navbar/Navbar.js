@@ -18,6 +18,10 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Avatar, Button, Divider, Grid2, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { GridViewOutlined } from "@mui/icons-material";
+import { shallowEqual, useSelector } from "react-redux";
+import { getBoardName } from "../../features/board/boardSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -77,8 +81,26 @@ const board = [
       "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident",
   },
 ];
-export default function PrimarySearchAppBar({boardId}) {
-  console.log(boardId)
+export default function PrimarySearchAppBar({ boardId }) {
+  const [boardName, setBoardName] = React.useState("");
+  const { boardNameNav } = useSelector(
+    (state) => ({
+      boardNameNav: state.board.boardNameNav,
+    }),
+    shallowEqual
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (boardId) dispatch(getBoardName({ boardId }));
+  }, [boardId, dispatch]);
+
+  useEffect(() => {
+    if (boardNameNav) {
+      setBoardName(boardNameNav);
+    }
+  }, [boardNameNav]);
+
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -175,20 +197,8 @@ export default function PrimarySearchAppBar({boardId}) {
       </MenuItem>
     </Menu>
   );
-  const [boardName,setBoardName] = React.useState('')
-  React.useEffect(()=>{
-    if(boardId){
-      board.map((b)=>{
-       let bId = '' + b.boardId
-        if(bId=== boardId){
-          setBoardName(b.boardName)
-        }
-      })
-    }else{
-      setBoardName("")
-    }
-  },[boardId])
-console.log(boardName)
+
+  console.log(boardName);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="transparent" elevation={1}>
@@ -217,45 +227,60 @@ console.log(boardName)
               </Typography>
             </Grid2>
           </Link>
-                {boardName ?  (<Box sx={{ flexGrow: 1, marginLeft: "50px" }}>
-            <Stack
-              direction="row"
-              divider={<Divider orientation="vertical" flexItem />}
-              spacing={0.5}
-            >
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                sx={{
-                  mr: 3,
-                  ml: 1,
-                  display: { xs: "none", md: "flex" },
-                  fontFamily: "monospace",
-                  fontWeight: 800,
-                  letterSpacing: ".3rem",
-                  color: "black",
-                  textDecoration: "none",
-                  alignItems: "center",
-                }}
+          {boardName ? (
+            <Box sx={{ flexGrow: 1, marginLeft: "50px" }}>
+              <Stack
+                direction="row"
+                divider={<Divider orientation="vertical" flexItem />}
+                spacing={0.5}
               >
-                {boardName}
-              </Typography>
-              <div >
-                <Button
-                  href="/"
-                  variant="contained"
-                  sx={{backgroundColor:"#000", height:40}}
+                <Typography
+                  variant="h6"
+                  id="board-name"
+                  component="a"
+                  sx={{
+                    mr: 5,
+                    ml: 1,
+                    paddingRight:2,
+                    display: { xs: "none", md: "flex" },
+                    fontFamily: "monospace",
+                    fontWeight: 800,
+                    letterSpacing: ".3rem",
+                    color: "black",
+                    textDecoration: "none",
+                    alignItems: "center",
+                    maxWidth: "30vw",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
                 >
-                  <GridViewOutlined />
-                  <p style={{ color: "white",textTransform:"none",marginLeft:"5px" }}>All Board</p>
-                </Button>
-              </div>
-            </Stack>
-          </Box>) :(<Box sx={{ flexGrow: 1}}>
-            
-            </Box>)}
-          
+                  {boardName}
+                </Typography>
+                <div>
+                  <Button
+                    href="/"
+                    variant="contained"
+                    sx={{ backgroundColor: "#000", height: 40 }}
+                  >
+                    <GridViewOutlined />
+                    <p
+                      style={{
+                        color: "white",
+                        textTransform: "none",
+                        marginLeft: "5px",
+                      }}
+                    >
+                      All Board
+                    </p>
+                  </Button>
+                </div>
+              </Stack>
+            </Box>
+          ) : (
+            <Box sx={{ flexGrow: 1 }}></Box>
+          )}
+
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Toolbar>
               <Search sx={{ border: 1, borderColor: "slategrey" }}>

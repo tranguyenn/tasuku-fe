@@ -10,7 +10,7 @@ import { Box, Button, Grid2, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import EditTask from "../../organisms/EditModal/EditModal";
 
-export default function Task({ taskId, index, content,column }) {
+export default function Task({ taskId, index, content,column, taskName,cover,boardId }) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -34,7 +34,7 @@ export default function Task({ taskId, index, content,column }) {
               <CardMedia
                 component="img"
                 height="140"
-                image="https://picsum.photos/200/300"
+                image={cover?cover:"https://picsum.photos/200/300"}
                 alt="green iguana"
               />
             </Box>
@@ -52,7 +52,7 @@ export default function Task({ taskId, index, content,column }) {
                     component="div"
                     align="left"
                   >
-                    {content}
+                    {taskName}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -72,7 +72,7 @@ export default function Task({ taskId, index, content,column }) {
           </Card>
         )}
       </Draggable>
-      <EditTask handleClose={handleClose} open={open} column={column} content={content}/>
+      <EditTask handleClose={handleClose} open={open} boardId={boardId} column={column} content={content} taskName={taskName} cover={cover} taskId={taskId}/>
     </div>
   );
 }

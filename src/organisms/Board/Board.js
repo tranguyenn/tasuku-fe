@@ -11,6 +11,10 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Task from "../../molecules/TaskCard/Task";
 import AddIcon from "@mui/icons-material/Add";
 import TaskDialog from "../TaskDialog/TaskDialog";
+import { shallowEqual, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getTask, updateTask } from "../../features/task/taskSlice";
+import { useEffect } from "react";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -25,11 +29,11 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 const initialData = {
   tasks: {
-    "task-1": { id: "task-1", content: "Take out the garbage" },
-    "task-2": { id: "task-2", content: "Watch my favorite show" },
-    "task-3": { id: "task-3", content: "Charge my phone" },
-    "task-4": { id: "task-4", content: "Cook dinner" },
-    "task-5": { id: "task-5", content: "Go to bed" },
+    "task-2": { id: "task-2",name:"Name-task", content: "Watch my favorite show" },
+    "task-1": { id: "task-1",name:"Name-task", content: "Take out the garbage" },
+    "task-3": { id: "task-3",name:"Name-task", content: "Charge my phone" },
+    "task-4": { id: "task-4",name:"Name-task", content: "Cook dinner" },
+    "task-5": { id: "task-5",name:"Name-task", content: "Go to bed" },
   },
   columns: {
     "column-1": {
@@ -53,14 +57,37 @@ const initialData = {
       taskIds: [],
     },
   },
-  columnOrder: ["column-1", "column-2", "column-3","column-4"],
+  columnOrder: ["column-1", "column-2", "column-3", "column-4"],
 };
 
-export default function Board() {
+export default function Board({ boardId }) {
   const [data, setData] = React.useState(initialData);
+
+  const { isLoading, error, taskList } = useSelector(
+    (state) => ({
+      isLoading: state.task.isLoading,
+      error: state.task.error,
+      taskList: state.task.taskList,
+    }),
+    shallowEqual
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (boardId) dispatch(getTask({ boardId }));
+  }, [boardId, dispatch]);
+
+  useEffect(() => {
+    if (taskList) {
+      setData(taskList);
+    }
+  }, [taskList]);
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
+    console.log("destination",destination);
+    console.log("source",source);
+    console.log("dragg",draggableId);
     if (!destination) return;
     if (
       destination.droppableId === source.droppableld &&
@@ -68,9 +95,12 @@ export default function Board() {
     ) {
       return;
     }
+
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
-
+    console.log("start", start);
+    console.log("finish", finish===start);  
+    console.log("drag data",data)
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
@@ -89,6 +119,14 @@ export default function Board() {
       setData(newState);
       return;
     }
+    const dataEdit={
+      taskId: draggableId,
+      status: finish.title.toLowerCase(),
+      boardId: boardId
+    }
+    console.log("update status data",dataEdit)
+    dispatch(updateTask(dataEdit));
+
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -118,7 +156,7 @@ export default function Board() {
   const handleClose = () => {
     setOpen(false);
   };
- 
+
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -159,14 +197,19 @@ export default function Board() {
                   </Typography>
 
                   <Button
-                  onClick={handleClickOpen}
+                    onClick={handleClickOpen}
                     variant="contained"
                     endIcon={<AddIcon />}
                     sx={{ alignItems: "center", backgroundColor: "black" }}
                   >
-                    Add a Task
+                    Task
                   </Button>
-                  <TaskDialog open={open} handleClickOpen={handleClickOpen} handleClose={handleClose}/>
+                  <TaskDialog
+                    open={open}
+                    handleClickOpen={handleClickOpen}
+                    handleClose={handleClose}
+                    boardId={boardId}
+                  />
                 </Grid2>
 
                 <Droppable droppableId={column.id} key={column.id} type="group">
@@ -192,9 +235,12 @@ export default function Board() {
                       {tasks?.map((task, index) => (
                         <Task
                           taskId={task.id}
+                          boardId={boardId}
+                          taskName={task.name}
                           index={index}
                           key={task.id}
                           content={task.content}
+                          cover={task.cover}
                           column={column.title}
                           noWrap
                         />
@@ -206,99 +252,6 @@ export default function Board() {
               </Grid>
             );
           })}
-          {/* <Grid
-            size={4}
-            container
-            direction="column"
-            sx={{
-              paddingTop: "10px",
-            }}
-          >
-            <Typography variant="h5" sx={{ textAlign: "left" }}>
-              TODO
-            </Typography>
-
-            <Droppable droppableId="column-1" key="column-1">
-              {(provided) => (
-                <Stack
-                  spacing={2}
-                  sx={{
-                    overflow: "auto",
-                    height: "77vh",
-                    padding: "10px",
-                    alignItems: "center",
-                  }}
-                  className="scrollbar"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {data.tasks?.map((task, index) => (
-                    <Task
-                      taskId={task.id}
-                      index={index}
-                      key={index}
-                      content={task.content}
-                    />
-                  ))}
-                  {provided.placeholder}
-                </Stack>
-              )}
-            </Droppable>
-          </Grid>
-          <Grid
-            size={4}
-            container
-            direction="column"
-            sx={{
-              paddingTop: "10px",
-            }}
-          >
-            <Typography variant="h5" sx={{ textAlign: "left" }}>
-              TODO
-            </Typography>
-            <Stack
-              spacing={2}
-              sx={{
-                overflow: "auto",
-                height: "77vh",
-                padding: "10px",
-                alignItems: "center",
-              }}
-              className="scrollbar"
-            >
-              <TaskCard />
-              <TaskCard />
-              <TaskCard />
-              <TaskCard />
-            </Stack>
-          </Grid>
-          <Grid
-            size={4}
-            container
-            direction="column"
-            sx={{
-              paddingTop: "10px",
-            }}
-          >
-            <Typography variant="h5" sx={{ textAlign: "left" }}>
-              TODO
-            </Typography>
-            <Stack
-              spacing={2}
-              sx={{
-                overflow: "auto",
-                height: "77vh",
-                padding: "10px",
-                alignItems: "center",
-              }}
-              className="scrollbar"
-            >
-              <TaskCard />
-              <TaskCard />
-              <TaskCard />
-              <TaskCard />
-            </Stack>
-          </Grid> */}
         </Grid>
       </Box>
     </DragDropContext>

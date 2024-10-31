@@ -1,8 +1,18 @@
-// import { configureStore } from '@reduxjs/toolkit';
-// import counterReducer from '../features/counter/counterSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import userReducer from "../features/user/userSlice";
+import taskReducer from "../features/task/taskSlice";
+import commentReducer from "../features/comment/commentSlice";
+import boardReducer from "../features/board/boardSlice";
 
-// export const store = configureStore({
-//   reducer: {
-//     counter: counterReducer,
-//   },
-// });
+const rootReducer = combineReducers({
+  task: taskReducer,
+  user: userReducer,
+  comment: commentReducer,
+  board: boardReducer,
+});
+
+const store = configureStore({
+  reducer: rootReducer,
+});
+
+export default store;

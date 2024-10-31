@@ -4,7 +4,6 @@ import UploadSingleFile from "./UploadSingleFile";
 
 function FUploadImage({ name, ...other }) {
   const { control } = useFormContext();
-
   return (
     <Controller
       name={name}
