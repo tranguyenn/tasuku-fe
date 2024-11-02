@@ -2,6 +2,8 @@ import { createContext, useReducer, useEffect } from "react";
 import { useSelector } from "react-redux";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
+import { cloudinaryUpload } from "../utils/cloudinary";
+
 
 const initialState = {
   isInitialized: false,
@@ -87,6 +89,7 @@ const reducer = (state, action) => {
 
 const setSession = (accessToken) => {
   if (accessToken) {
+    console.log("acces token", accessToken);
     window.localStorage.setItem("accessToken", accessToken);
     apiService.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
@@ -105,13 +108,14 @@ function AuthProvider({ children }) {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
-
+        
         if (accessToken && isValidToken(accessToken)) {
+          console.log("manual remove",accessToken)
           setSession(accessToken);
 
           const response = await apiService.get("/users/me");
           const user = response.data;
-
+          console.log("inital",user)
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated: true, user },
@@ -147,7 +151,7 @@ function AuthProvider({ children }) {
   }, [updatedProfile]);
 
   const login = async ({ email, password }, callback) => {
-    const response = await apiService.post("/auth/login", { email, password });
+    const response = await apiService.post("/users/login", { email, password });
     const { user, accessToken } = response.data;
     console.log(response);
     setSession(accessToken);
@@ -160,11 +164,18 @@ function AuthProvider({ children }) {
     callback();
   };
 
-  const register = async ({ name, email, password }, callback) => {
+  const register = async ({ name, email, password, avatar, role }, callback) => {
+    console.log("register");
+    let imgUrl=""
+    if(avatar){
+      imgUrl = await cloudinaryUpload(avatar);
+    }
     const response = await apiService.post("/users", {
       name,
+      avatar: imgUrl,
       email,
       password,
+      role
     });
 
     const { user, accessToken } = response.data;

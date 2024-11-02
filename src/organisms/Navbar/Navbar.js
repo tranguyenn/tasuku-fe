@@ -16,13 +16,14 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Avatar, Button, Divider, Grid2, Stack } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GridViewOutlined } from "@mui/icons-material";
 import { shallowEqual, useSelector } from "react-redux";
 import { getBoardName } from "../../features/board/boardSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-
+import useAuth from "../../hooks/useAuth";
+import LogoutIcon from '@mui/icons-material/Logout';
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -82,6 +83,9 @@ const board = [
   },
 ];
 export default function PrimarySearchAppBar({ boardId }) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
   const [boardName, setBoardName] = React.useState("");
   const { boardNameNav } = useSelector(
     (state) => ({
@@ -124,6 +128,16 @@ export default function PrimarySearchAppBar({ boardId }) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLogout = async () => {
+    try {
+      handleMenuClose();
+      await logout(() => {
+        navigate("/login");
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -141,8 +155,11 @@ export default function PrimarySearchAppBar({ boardId }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
+      <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+        Logout
+      </MenuItem>
     </Menu>
   );
 
@@ -163,15 +180,15 @@ export default function PrimarySearchAppBar({ boardId }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
+      </MenuItem> */}
+      {/* <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -182,8 +199,8 @@ export default function PrimarySearchAppBar({ boardId }) {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      </MenuItem> */}
+      {/* <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -194,6 +211,18 @@ export default function PrimarySearchAppBar({ boardId }) {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem> */}
+      <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+      <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton>
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   );
@@ -294,7 +323,7 @@ export default function PrimarySearchAppBar({ boardId }) {
               </Search>
             </Toolbar>
 
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
@@ -302,8 +331,8 @@ export default function PrimarySearchAppBar({ boardId }) {
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
-            </IconButton>
-            <IconButton
+            </IconButton> */}
+            {/* <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
@@ -311,7 +340,7 @@ export default function PrimarySearchAppBar({ boardId }) {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               edge="end"

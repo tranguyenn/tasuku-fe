@@ -5,24 +5,15 @@ import { shallowEqual, useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getBoards } from "../../features/board/boardSlice";
 import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 
 function HomePage() {
-  const board = [
-    {
-      _id: 1,
-      name: "Board 1",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-    },
-    {
-      _id: 2,
-      name: "Board 2",
-      description:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-    }
-  ];
-  let userId="671b6770a8e5d8a75c718ad4";
-  const [data, setData] = React.useState(board);
+  
+  const { user } = useAuth();
+  console.log("user",user)
+  let userId=user._id;
+  const [data, setData] = React.useState();
 
   const {
     isLoading,
@@ -55,7 +46,8 @@ function HomePage() {
         Public Boards
       </Typography>
         <Grid2 container spacing={2} >
-          {data.map((b, index) => (
+          {data?(
+          data.map((b, index) => (
             <Grid2 size={{ xs: 12,sm:6, md: 4, lg: 3  }} display="flex" justifyContent="center" alignItems="center">
             <BoardCard
             key={b._id}
@@ -66,7 +58,11 @@ function HomePage() {
             />
             </Grid2>
             
-          ))}
+          ))):(
+            <Typography variant="h6" align="left" sx={{marginTop:"20px",marginBottom:"10px"}}>
+             You don't have any boards
+          </Typography>
+          )}
         </Grid2>
       </Box>
     </div>

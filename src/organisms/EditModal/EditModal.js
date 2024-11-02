@@ -113,16 +113,18 @@ export default function EditTask({
     [setValue]
   );
   const onSubmit = (data) => {
-    console.log("submit",data)
+    defaultValues.name= data.name;
+    defaultValues.description = data.description;
+    console.log("submit", data);
     const content = {
       name: data.name,
       description: data.description,
       cover: data.image,
       board: boardId,
     };
-    dispatch(updateTaskInfor({taskId,content,boardId})).then(() => reset());
+    dispatch(updateTaskInfor({ taskId, content, boardId }));
   };
-  
+
   return (
     <React.Fragment>
       <BootstrapDialog
@@ -230,15 +232,15 @@ export default function EditTask({
 
                         <Grid2>
                           <Grid2 container alignItems="center">
-                            <NotesIcon />
+                            {/* <NotesIcon />
                             <Typography
                               variant="body1"
                               sx={{ fontWeight: "bold" }}
                             >
                               Activity
-                            </Typography>
+                            </Typography> */}
                           </Grid2>
-                          <Box>
+                          {/* <Box>
                             <Grid2
                               container
                               sx={{ marginTop: 2 }}
@@ -278,10 +280,9 @@ export default function EditTask({
                             ) : (
                               ""
                             )}
-                          </Box>
+                          </Box> */}
 
-                          <CommentCard />
-                          <CommentCard />
+                       
                         </Grid2>
                       </Grid2>
                       <Grid2 size={4} sx={{ paddingLeft: 3 }}>
@@ -295,7 +296,7 @@ export default function EditTask({
                           </Typography>
                         </Stack>
                         <Stack spacing={2} sx={{ marginTop: 2 }}>
-                          <Button
+                          {/* <Button
                             variant="outlined"
                             startIcon={<ImageIcon />}
                             sx={{
@@ -306,7 +307,7 @@ export default function EditTask({
                             }}
                           >
                             Cover
-                          </Button>
+                          </Button> */}
                           {/* <Button
                         variant="outlined"
                         startIcon={<LocalOfferIcon />}
@@ -341,14 +342,14 @@ export default function EditTask({
               </Box>
             </DialogContent>
             <DialogActions>
-            <LoadingButton
-                    type="submit"
-                    variant="contained"
-                    size="small"
-                    loading={isSubmitting || isLoading}
-                  >
-                    Edit
-                  </LoadingButton>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                size="small"
+                loading={isSubmitting || isLoading}
+              >
+                Edit
+              </LoadingButton>
             </DialogActions>
           </form>
         </FormProvider>

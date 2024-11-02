@@ -22,6 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import useAuth from "../../hooks/useAuth";
 import { LoadingButton } from "@mui/lab";
+import Logo from "../../organisms/form/Logo";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -52,27 +53,18 @@ function Login() {
   } = methods;
 
   const onSubmit = async (data) => {
-    //const from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/";
     let { email, password } = data;
-    if (email === "test@gmail.com" && password === "123") {
-      navigate("/");
-    } else {
-      reset();
-      setError("errorMessage", {
-        type: "custom",
-        message: "Wrong username or password",
-      });
-    }
-    // try {
-    //   //   await auth.login({ email, password }, () => {
-    //   //     navigate(from, { replace: true });
-    //   //   });
 
-    // } catch (error) {
-    //   reset();
-    //   setError("responseError", error);
-    //   console.log(error);
-    // }
+    try {
+      await auth.login({ email, password }, () => {
+        navigate(from, { replace: true });
+      });
+    } catch (error) {
+      reset();
+      setError("responseError", error);
+      console.log(error);
+    }
   };
   console.log(errors.errorMessage);
   return (
@@ -80,13 +72,31 @@ function Login() {
       maxWidth="xs"
       sx={{
         display: "flex",
-        justifyContent:"center",
+        justifyContent: "center",
+        alignItems: "center",
         height: "100vh",
-        marginTop:10
       }}
     >
-      <Box sx={{flexGrow:1,backgroundColor:"white", paddingX:5,width:"100%", paddingTop:5,height:"60%",boxShadow:"0px 0px 20px 34px rgba(0,0,0,0.1)",borderRadius:"16px"}}>
-      <Typography variant="h3" sx={{marginBottom:"10px"}}>Login</Typography>
+      <Box
+        sx={{
+          flexGrow: 1,
+          backgroundColor: "white",
+          paddingX: 5,
+          width: "100%",
+          paddingTop: 5,
+          height: "fit-content",
+          boxShadow: "0px 0px 20px 34px rgba(0,0,0,0.1)",
+          borderRadius: "16px",
+          paddingBottom: "40px",
+          display:"flex",
+          flexDirection:"column",
+          alignItems:"center"
+        }}
+      >
+        <Logo sx={{ width: 90, height: 90,mr:"5px"  }} />
+        <Typography variant="h3" sx={{ marginBottom: "10px" }}>
+          Login
+        </Typography>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             {!!errors.responseError && (
@@ -129,12 +139,7 @@ function Login() {
             alignItems="center"
             justifyContent="space-between"
             sx={{ my: 2 }}
-          >
-            <FCheckbox name="remember" label="Remember me" />
-            <Link component={RouterLink} variant="subtitle2" to="/">
-              Forgot password?
-            </Link>
-          </Stack>
+          ></Stack>
 
           {errors.errorMessage ? (
             <Alert severity="error" style={{ marginBottom: "10px" }}>

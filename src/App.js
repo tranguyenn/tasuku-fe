@@ -9,13 +9,14 @@ import ArticleIcon from "@mui/icons-material/Article";
 import MemberList from "./molecules/MemberList";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./router";
+import { AuthProvider } from "./contexts/AuthContext";
 function App() {
   return (
-    <div className="App">
+    <AuthProvider>
       <BrowserRouter>
         <Router />
       </BrowserRouter>
-    </div>
+    </AuthProvider>
   );
 }
 
