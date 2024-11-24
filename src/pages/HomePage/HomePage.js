@@ -55,6 +55,7 @@ function HomePage() {
             content={b.description}
             boardName={b.name}
             users={b.users}
+            boarCover={b.cover}
             />
             </Grid2>
             

@@ -9,7 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import "./Card.css";
 import { Avatar, AvatarGroup } from "@mui/material";
 
-export default function BoardCard({ boardId, content, boardName, users }) {
+export default function BoardCard({ boardId, content, boardName, users, boarCover }) {
   console.log("check user",users)
   return (
     <Card sx={{ maxWidth: 350, minWidth: 250, width: "100%"}}  className="cardEffect">
@@ -18,7 +18,7 @@ export default function BoardCard({ boardId, content, boardName, users }) {
           <CardMedia
             component="img"
             height="150"
-            image="https://picsum.photos/200/300"
+            image={boarCover?boarCover:"https://picsum.photos/200/300"}
             alt="green iguana"
             className="card-media"
           />
