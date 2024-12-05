@@ -93,12 +93,15 @@ function RegisterPage() {
     [setValue]
   );
   return (
-    <Container maxWidth="xs" sx={{display: "flex", alignItems: "center", justifyContent:"center", height:"100vh"}}>
+    <Container 
+    maxWidth={{xs: "90%", md:"25%", lg:"80%" }} 
+    sx={{display: "flex", alignItems: "center", justifyContent:"center", height:"100vh"}}>
       <Box sx={{flexGrow:1,backgroundColor:"white", paddingX:5,width:"100%", paddingTop:5,height:"80%",boxShadow:"0px 0px 20px 34px rgba(0,0,0,0.1)",borderRadius:"16px", paddingBottom:"40px"}}>
 
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={3} sx={{ alignItems: "center" }}>
+        <form onSubmit={handleSubmit(onSubmit)} sx={{height: "100%"}}>
+          <Stack spacing={3} direction={{ xs: 'column', lg: 'row' }} sx={{ alignItems: "center", height:"70vh", justifyContent:"center" }}>
+            <div style={{display:"flex", justifyContent:"flex-start", height:"50%"}}>
             <FUploadAvatar
             name="image"
               maxSize={3145728}
@@ -119,9 +122,12 @@ function RegisterPage() {
                 </Typography>
               }
             />
+            </div>
+            <div style={{maxWidth:"50vh",display: "flex", alignItems: "center", justifyContent:"center",flexDirection:"column", flex:"1",height:"100%" }}>
             <FTextField name="name" label="Full name" />
-            <FTextField name="email" label="Email address" />
+            <FTextField name="email" label="Email address"sx={{marginTop:"20px"}}  />
             <FTextField
+            sx={{marginTop:"20px"}}
               name="password"
               label="Password"
               type={showPassword ? "text" : "password"}
@@ -143,6 +149,7 @@ function RegisterPage() {
               }}
             />
             <FTextField
+            sx={{marginTop:"20px"}}
               name="passwordConfirmation"
               label="Password Confirmation"
               type={showPasswordConfirmation ? "text" : "password"}
@@ -166,6 +173,7 @@ function RegisterPage() {
               }}
             />
             <FRadioGroup
+            sx={{marginTop:"20px"}}
               name="role"
               label="Role"
               options={["user", "manager"]}
@@ -181,6 +189,7 @@ function RegisterPage() {
             </Alert>
 
             <LoadingButton
+            sx={{marginTop:"20px"}}
               fullWidth
               size="large"
               type="submit"
@@ -189,6 +198,7 @@ function RegisterPage() {
             >
               Register
             </LoadingButton>
+            </div>
           </Stack>
         </form>
       </FormProvider>

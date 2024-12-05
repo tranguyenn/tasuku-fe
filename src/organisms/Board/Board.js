@@ -168,15 +168,20 @@ export default function Board({ boardId }) {
           marginX: "10px",
           borderRadius: "16px",
           minHeight: "85vh",
+          overflowX:"auto",
+          // position:"relative",
+          whiteSpace: "nowrap",
+          
         }}
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className="testcolumn" width="1650px" >
           {data.columnOrder.map((columnId) => {
             const column = data.columns[columnId];
             const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
             return (
               <Grid
                 size={3}
+                 maxWidth={{xs:"320px"}}
                 container
                 direction="column"
                 sx={{
@@ -192,7 +197,7 @@ export default function Board({ boardId }) {
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Typography variant="h5" sx={{ textAlign: "left" }}>
+                  <Typography variant="h5" sx={{ textAlign: "left" }} {}>
                     {column.title}
                   </Typography>
 
@@ -201,8 +206,17 @@ export default function Board({ boardId }) {
                     variant="contained"
                     endIcon={<AddIcon />}
                     sx={{ alignItems: "center", backgroundColor: "black" }}
+                    display={{xs:"none"}}
                   >
                     Task
+                  </Button>
+                  <Button
+                    onClick={handleClickOpen}
+                    variant="contained"
+                    endIcon={<AddIcon />}
+                    sx={{ alignItems: "center", backgroundColor: "black" }}
+                  >
+                    sm
                   </Button>
                   <TaskDialog
                     open={open}
@@ -220,7 +234,7 @@ export default function Board({ boardId }) {
                       useFlexGap
                       sx={{
                         padding: "10px",
-                        overflow: "auto",
+                        // overflow: "auto",
                         flexShrink: 0,
                         flexGrow: 1,
                         minHeight: "75vh",
