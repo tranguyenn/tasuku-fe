@@ -84,6 +84,7 @@ const board = [
 ];
 export default function PrimarySearchAppBar({ boardId }) {
   const { user, logout } = useAuth();
+  const userImg=user.avatar;
   const navigate = useNavigate();
 
   const [boardName, setBoardName] = React.useState("");
@@ -350,7 +351,7 @@ export default function PrimarySearchAppBar({ boardId }) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar alt={user.name} src={userImg} />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>

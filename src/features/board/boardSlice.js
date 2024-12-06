@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
+import { cloudinaryUpload } from "../../utils/cloudinary";
+import { toast } from "react-toastify";
 
 
 const initialState = {
@@ -41,7 +43,7 @@ const slice= createSlice({
           state.sideBarBoard=boardFound;
           console.log("check boards",state.boardNameNav);
       },
-          createPostSuccess(state, action) {
+          createBoardSuccess(state, action) {
             state.isLoading = false;
             state.error = null;
         },
@@ -83,7 +85,32 @@ export const getBoardName =
       dispatch(slice.actions.hasError(error.message));
     }
 };
-
+export const createBoard =
+({content, userId} ) =>
+async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    console.log("create board ",content)
+    const name= content.name;
+    const description= content.description;
+    let imgUrl="https://res.cloudinary.com/de1gbhd5y/image/upload/v1726823417/samples/cup-on-a-table.jpg";
+    if(content.cover){
+      imgUrl = await cloudinaryUpload(content.cover);
+    }
+    console.log("create img",imgUrl)
+    const response = await apiService.post("/boards", {
+      name: content.name,
+      description: content.description,
+      cover: imgUrl,
+      creator: userId
+    });
+    dispatch(slice.actions.createBoardSuccess(response.data));
+    dispatch(getBoards({userId}));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error(error.message);
+  }
+};
 
 
 

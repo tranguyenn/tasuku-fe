@@ -174,14 +174,14 @@ export default function Board({ boardId }) {
           
         }}
       >
-        <Grid container spacing={3} className="testcolumn" width="1650px" >
+        <Grid container spacing={3} className="testcolumn" minWidth="1650px" width="100%">
           {data.columnOrder.map((columnId) => {
             const column = data.columns[columnId];
             const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
             return (
               <Grid
+               maxWidth={{xs:"320px", md:"500px", lg:"600px"}}
                 size={3}
-                 maxWidth={{xs:"320px"}}
                 container
                 direction="column"
                 sx={{
@@ -197,7 +197,7 @@ export default function Board({ boardId }) {
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Typography variant="h5" sx={{ textAlign: "left" }} {}>
+                  <Typography variant="h5" sx={{ textAlign: "left" }} >
                     {column.title}
                   </Typography>
 
@@ -206,18 +206,11 @@ export default function Board({ boardId }) {
                     variant="contained"
                     endIcon={<AddIcon />}
                     sx={{ alignItems: "center", backgroundColor: "black" }}
-                    display={{xs:"none"}}
+                  
                   >
                     Task
                   </Button>
-                  <Button
-                    onClick={handleClickOpen}
-                    variant="contained"
-                    endIcon={<AddIcon />}
-                    sx={{ alignItems: "center", backgroundColor: "black" }}
-                  >
-                    sm
-                  </Button>
+             
                   <TaskDialog
                     open={open}
                     handleClickOpen={handleClickOpen}
@@ -233,7 +226,7 @@ export default function Board({ boardId }) {
                       direction="column"
                       useFlexGap
                       sx={{
-                        padding: "10px",
+                        // padding: "10px",
                         // overflow: "auto",
                         flexShrink: 0,
                         flexGrow: 1,

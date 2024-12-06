@@ -10,7 +10,6 @@ import "./Card.css";
 import { Avatar, AvatarGroup } from "@mui/material";
 
 export default function BoardCard({ boardId, content, boardName, users, boarCover }) {
-  console.log("check user",users)
   return (
     <Card sx={{ maxWidth: 350, minWidth: 250, width: "100%"}}  className="cardEffect">
       <CardActionArea href={`/board-detail/${boardId}`}>

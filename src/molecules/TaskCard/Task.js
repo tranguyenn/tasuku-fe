@@ -9,8 +9,16 @@ import "./Task.css";
 import { Box, Button, Grid2, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import EditTask from "../../organisms/EditModal/EditModal";
-
-export default function Task({ taskId, index, content,column, taskName,cover,boardId }) {
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+export default function Task({
+  taskId,
+  index,
+  content,
+  column,
+  taskName,
+  cover,
+  boardId,
+}) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,7 +31,8 @@ export default function Task({ taskId, index, content,column, taskName,cover,boa
       <Draggable key={taskId} draggableId={`${taskId}`} index={index}>
         {(provided, snapshot) => (
           <Card
-            sx={{ width: 345, borderRadius: "16px" }}
+        
+            sx={{ borderRadius: "16px", width:"30vw", maxWidth: 350, minWidth: 280 }}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
@@ -34,7 +43,7 @@ export default function Task({ taskId, index, content,column, taskName,cover,boa
               <CardMedia
                 component="img"
                 height="140"
-                image={cover?cover:"https://picsum.photos/200/300"}
+                image={cover ? cover : "https://picsum.photos/200/300"}
                 alt="green iguana"
               />
             </Box>
@@ -45,7 +54,7 @@ export default function Task({ taskId, index, content,column, taskName,cover,boa
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Grid2>
+                <Grid2 size={12}>
                   <Typography
                     gutterBottom
                     variant="h5"
@@ -62,17 +71,38 @@ export default function Task({ taskId, index, content,column, taskName,cover,boa
                     {content}
                   </Typography>
                 </Grid2>
-                <Grid2>
-                  <IconButton className="editEffect" sx={{ color: "black" }} onClick={handleClickOpen}>
-                    <EditIcon />
-                  </IconButton>
+                <Grid2 offset={{ xs: "auto" }}>
+                  <Button
+                    className="editEffect"
+                    sx={{
+                      alignItems: "center",
+                      color: "text.secondary",
+                      borderColor: "text.secondary",
+                      fontSize: "12px",
+                      padding: "2px",
+                    }}
+                    onClick={handleClickOpen}
+                    variant="outlined"
+                  >
+                    Open
+                   <OpenInNewIcon sx={{fontSize: 12, paddingLeft: "2px"}}/>
+                  </Button>
                 </Grid2>
               </Grid2>
             </CardContent>
           </Card>
         )}
       </Draggable>
-      <EditTask handleClose={handleClose} open={open} boardId={boardId} column={column} content={content} taskName={taskName} cover={cover} taskId={taskId}/>
+      <EditTask
+        handleClose={handleClose}
+        open={open}
+        boardId={boardId}
+        column={column}
+        content={content}
+        taskName={taskName}
+        cover={cover}
+        taskId={taskId}
+      />
     </div>
   );
 }
