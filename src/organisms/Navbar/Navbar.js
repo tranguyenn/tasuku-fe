@@ -313,15 +313,7 @@ export default function PrimarySearchAppBar({ boardId }) {
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Toolbar>
-              <Search sx={{ border: 1, borderColor: "slategrey" }}>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
+              
             </Toolbar>
 
             {/* <IconButton

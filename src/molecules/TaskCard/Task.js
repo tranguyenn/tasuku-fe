@@ -31,7 +31,6 @@ export default function Task({
       <Draggable key={taskId} draggableId={`${taskId}`} index={index}>
         {(provided, snapshot) => (
           <Card
-        
             sx={{ borderRadius: "16px", width:"30vw", maxWidth: 350, minWidth: 280 }}
             {...provided.draggableProps}
             {...provided.dragHandleProps}

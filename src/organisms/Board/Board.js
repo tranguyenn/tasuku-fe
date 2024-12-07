@@ -7,7 +7,6 @@ import { Button, Grid2, IconButton, Stack, Typography } from "@mui/material";
 import TaskCard from "../../molecules/Card";
 import "./Board.css";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-
 import Task from "../../molecules/TaskCard/Task";
 import AddIcon from "@mui/icons-material/Add";
 import TaskDialog from "../TaskDialog/TaskDialog";

@@ -10,8 +10,16 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import InfoIcon from "@mui/icons-material/Info";
 import "./Sidebar.css";
-import { Avatar, Grid2, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Grid2,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
@@ -22,8 +30,11 @@ import { shallowEqual, useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getBoardName } from "../../features/board/boardSlice";
+import useAuth from "../../hooks/useAuth";
 
 export default function Sidebar({ boardId }) {
+  const { user } = useAuth();
+  const loginUser = user;
   const [state, setState] = React.useState({
     right: false,
   });
@@ -98,7 +109,7 @@ export default function Sidebar({ boardId }) {
           </Typography>
         </Stack>
         <Grid2 sx={{ marginTop: 1 }} container spacing={2} alignItems="center">
-          <Avatar alt="Remy Sharp" variant="rounded" src="../people-1.jpg" />
+          <Avatar variant="rounded" src={boardInfo?.creator.avatar} />
           <Grid2 direction="row">
             <Typography variant="body2" sx={{ fontWeight: "bold" }}>
               {boardInfo?.creator.name}
@@ -135,7 +146,16 @@ export default function Sidebar({ boardId }) {
             </Typography>
           </Stack>
           <IconButton sx={{ color: "black" }} onClick={handleClickOpen}>
-            <AddIcon />
+            {loginUser._id === boardInfo?.creator?._id ||
+            loginUser.role === "manager" ? (
+              <AddIcon />
+            ) : (
+              <Tooltip title="Only creator and manager can invite" arrow>
+                <IconButton sx={{ color: "black" }}>
+                  <InfoIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </IconButton>
         </Grid2>
 
@@ -160,7 +180,15 @@ export default function Sidebar({ boardId }) {
                     {user.name}
                   </Typography>
                 </Grid2>
-                <Typography variant="body2"> {user._id==boardInfo?.creator._id?"Admin":"Member"}</Typography>
+                <Typography variant="body2">
+                  {user._id == boardInfo?.creator._id
+                    ? user.role == "manager"
+                      ? "Creator, Manager"
+                      : "Creator"
+                    : user.role == "manager"
+                    ? "Manager"
+                    : "Member"}
+                </Typography>
               </Grid2>
             </>
           );
