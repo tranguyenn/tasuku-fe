@@ -99,6 +99,7 @@ export const updateTask =
   ({  boardId, email }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
+    console.log("try qua",email)
     try {
       const response = await apiService.put(`/boards/assignee`, {
         boardId,

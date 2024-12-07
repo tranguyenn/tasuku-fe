@@ -44,7 +44,8 @@ const defaultValues = {
   password: "",
   passwordConfirmation: "",
   role: "user",
-  image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcazeHuAcZDzv4_61fPLT-S00XnaKXch2YWQ&s"
+  image:
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcazeHuAcZDzv4_61fPLT-S00XnaKXch2YWQ&s",
 };
 
 function RegisterPage() {
@@ -93,115 +94,242 @@ function RegisterPage() {
     [setValue]
   );
   return (
-    <Container 
-    maxWidth={{xs: "90%", md:"25%", lg:"80%" }} 
-    sx={{display: "flex", alignItems: "center", justifyContent:"center", height:"100vh"}}>
-      <Box sx={{flexGrow:1,backgroundColor:"white", paddingX:5,width:"100%", paddingTop:5,height:"80%",boxShadow:"0px 0px 20px 34px rgba(0,0,0,0.1)",borderRadius:"16px", paddingBottom:"40px"}}>
+    <Container
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
+      width={{ sx: "90vw", md: "80vw", lg: "50vw" }}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          backgroundColor: "white",
+          paddingX: 5,
+          width: "50vw",
+          paddingTop: 5,
 
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} sx={{height: "100%"}}>
-          <Stack spacing={3} direction={{ xs: 'column', lg: 'row' }} sx={{ alignItems: "center", height:"70vh", justifyContent:"center" }}>
-            <div style={{display:"flex", justifyContent:"flex-start", height:"50%"}}>
-            <FUploadAvatar
-            name="image"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2,
-                    mx: "auto",
-                    display: "block",
-                    textAlign: "center",
-                    color: "text.secondary",
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
-            </div>
-            <div style={{maxWidth:"50vh",display: "flex", alignItems: "center", justifyContent:"center",flexDirection:"column", flex:"1",height:"100%" }}>
-            <FTextField name="name" label="Full name" />
-            <FTextField name="email" label="Email address"sx={{marginTop:"20px"}}  />
-            <FTextField
-            sx={{marginTop:"20px"}}
-              name="password"
-              label="Password"
-              type={showPassword ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? (
-                        <VisibilityIcon />
-                      ) : (
-                        <VisibilityOffIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+          boxShadow: "0px 0px 20px 34px rgba(0,0,0,0.1)",
+          borderRadius: "16px",
+          paddingBottom: "40px",
+        }}
+        
+      >
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} sx={{ height: "100%" }}>
+            <Stack
+              spacing={3}
+              direction={{ xs: "column", sm: "row" }}
+              sx={{
+                alignItems: "center",
+                height: {xs:"85vh",md:"75%",lg:"70%"},
+                justifyContent: "center",
               }}
-            />
-            <FTextField
-            sx={{marginTop:"20px"}}
-              name="passwordConfirmation"
-              label="Password Confirmation"
-              type={showPasswordConfirmation ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() =>
-                        setShowPasswordConfirmation(!showPasswordConfirmation)
-                      }
-                      edge="end"
-                    >
-                      {showPasswordConfirmation ? (
-                        <VisibilityIcon />
-                      ) : (
-                        <VisibilityOffIcon />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FRadioGroup
-            sx={{marginTop:"20px"}}
-              name="role"
-              label="Role"
-              options={["user", "manager"]}
-            ></FRadioGroup>
-            {!!errors.responseError && (
-              <Alert severity="error">{errors.responseError.message}</Alert>
-            )}
-            <Alert severity="info">
-              Already have an account?{" "}
-              <Link variant="subtitle2" component={RouterLink} to="/login">
-                Sign in
-              </Link>
-            </Alert>
-
-            <LoadingButton
-            sx={{marginTop:"20px"}}
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={isSubmitting}
+              fontSize={{ xs: "8px" }}
             >
-              Register
-            </LoadingButton>
-            </div>
-          </Stack>
-        </form>
-      </FormProvider>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  height: "20%",
+                }}
+                className="checkava"
+              >
+                <FUploadAvatar
+                  name="image"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  sx={{
+                    width: {
+                      xs: "12vh",
+                      md: "20vh",
+                    },
+                    height: {
+                      xs: "12vh",
+                      md: "20vh",
+                    },
+                  }}
+                  helperText={
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mx: "auto",
+                        display: "block",
+                        textAlign: "center",
+                        color: "text.secondary",
+                      }}
+                    >
+                      Allowed *.jpeg, *.jpg, *.png, *.gif
+                      <br /> max size of {fData(3145728)}
+                    </Typography>
+                  }
+                />
+              </div>
+              <div
+                style={{
+                  maxWidth: "50vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  flex: "1",
+                  height: "80%",
+                  
+                }}
+              >
+                <FTextField name="name" label="Full name" 
+                  sx={{ 
+                    
+                    '& .MuiInputBase-root': {
+                      height: {
+                        xs: '45px',
+                        md: '56px'
+                      }, // Apply height directly to the input area
+                    },
+                    "& .MuiFormLabel-root":{
+                        fontSize:{
+                          xs:" 15px",
+                          md:"1.1 rem"
+                        }
+                    }
+                  }}/>
+                <FTextField
+                  name="email"
+                  label="Email address"
+                  sx={{ marginTop:"20px",
+                    
+                    '& .MuiInputBase-root': {
+                      height: {
+                        xs: '45px',
+                        md: '56px'
+                      }, // Apply height directly to the input area
+                    },
+                    "& .MuiFormLabel-root":{
+                        fontSize:{
+                          xs:" 15px",
+                          md:"1.1 rem"
+                        }
+                    }
+                  }}
+                
+                />
+                <FTextField
+                   sx={{ marginTop:"17px",
+                  
+                    '& .MuiInputBase-root': {
+                      height: {
+                        xs: '45px',
+                        md: '56px'
+                      }, // Apply height directly to the input area
+                    },
+                    "& .MuiFormLabel-root":{
+                        fontSize:{
+                          xs:" 15px",
+                          md:"1.1 rem"
+                        }
+                    }
+                  }}
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FTextField
+                    sx={{ marginTop:"17px",
+              
+                    '& .MuiInputBase-root': {
+                      height: {
+                        xs: '45px',
+                        md: '56px'
+                      }, // Apply height directly to the input area
+                    },
+                    "& .MuiFormLabel-root":{
+                        fontSize:{
+                          xs:" 15px",
+                          md:"1.1 rem"
+                        }
+                    }
+                  }}
+                  name="passwordConfirmation"
+                  label="Password Confirmation"
+                  type={showPasswordConfirmation ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() =>
+                            setShowPasswordConfirmation(
+                              !showPasswordConfirmation
+                            )
+                          }
+                          edge="end"
+                        >
+                          {showPasswordConfirmation ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <FRadioGroup
+                  sx={{
+                    marginTop:"17px",
+                    color: "black",
+                    "&.Mui-checked": {
+                      color: "black",
+                    },
+                  }}
+                  name="role"
+                  label="Role"
+                  options={["User", "Manager"]}
+                ></FRadioGroup>
+                {!!errors.responseError && (
+                  <Alert severity="error">{errors.responseError.message}</Alert>
+                )}
+                <Alert
+                  severity="info"
+                  sx={{ backgroundColor: "#edeeff", color: "black" }}
+                >
+                  Already have an account?{" "}
+                  <Link variant="subtitle2" component={RouterLink} to="/login">
+                    Sign in
+                  </Link>
+                </Alert>
+
+                <LoadingButton
+                  sx={{ marginTop:"17px", backgroundColor: "black" }}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  loading={isSubmitting}
+                >
+                  Register
+                </LoadingButton>
+              </div>
+            </Stack>
+          </form>
+        </FormProvider>
       </Box>
     </Container>
   );

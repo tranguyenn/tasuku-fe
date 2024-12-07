@@ -1,7 +1,7 @@
 import * as React from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { Avatar, Box, Grid2, Paper, styled } from "@mui/material";
+import { Avatar, Box, Grid2, Paper, styled, Typography } from "@mui/material";
 import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { deepOrange, green, grey } from "@mui/material/colors";
@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getBoardName } from "../../features/board/boardSlice";
 
-export default function SubBar({boardId}) {
+export default function SubBar({ boardId }) {
   const [boardMemberList, setBoardMemberList] = React.useState([]);
   const { boardMemeber } = useSelector(
     (state) => ({
@@ -42,7 +42,7 @@ export default function SubBar({boardId}) {
     }),
   }));
   return (
-    <Box sx={{ flexGrow: 1,paddingY:"10px" }} paddingTop={1} paddingX={2}>
+    <Box sx={{ flexGrow: 1, paddingY: "10px" }} paddingTop={1} paddingX={2}>
       <Grid2
         container
         spacing={2}
@@ -57,23 +57,27 @@ export default function SubBar({boardId}) {
           justifyContent="flex-start"
           alignItems="center"
         >
-          <Button variant="contained" className="buttonHover" sx={{ marginRight: "3px",backgroundColor:"black" }}>
+          <Button
+            variant="contained"
+            className="buttonHover"
+            sx={{ marginRight: "3px", backgroundColor: "black",minWidth:"40px"}}
+          >
             {" "}
             <PublicOutlinedIcon />
-            Public
+            <Typography sx={{ display: { xs: "none", sm: "inline" } }}>
+              Public
+            </Typography>
           </Button>
-          {boardMemberList?.map(m=>(
+          {boardMemberList?.map((m) => (
             <Avatar
-            sx={{ bgcolor: grey[500],  marginRight: "5px" }}
-
-            variant="rounded"
-            src={m.avatar}
-          ></Avatar>
+              sx={{ bgcolor: grey[500], marginRight: "5px" }}
+              variant="rounded"
+              src={m.avatar}
+            ></Avatar>
           ))}
-          
         </Grid2>
         <Grid2 size={7} display={"flex"} justifyContent={"flex-end"}>
-          <Sidebar boardId={boardId}/>
+          <Sidebar boardId={boardId} />
         </Grid2>
       </Grid2>
     </Box>

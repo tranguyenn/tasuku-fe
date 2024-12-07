@@ -74,6 +74,8 @@ export default function Sidebar({ boardId }) {
 
   const handleClose = () => {
     setOpen(false);
+    if (boardId) dispatch(getBoardName({ boardId }));
+
   };
 
   const list = (anchor) => (

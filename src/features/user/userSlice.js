@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   updatedProfile: null,
   selectedUser: null,
+  listUser:null
 };
 
 const slice = createSlice({
@@ -37,6 +38,12 @@ const slice = createSlice({
 
       state.selectedUser = action.payload;
     },
+    getUserSearchSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      state.listUser = action.payload;
+    },
   },
 });
 
@@ -49,6 +56,17 @@ export const getUser = (id) => async (dispatch) => {
   try {
     const response = await apiService.get(`/users/${id}`);
     dispatch(slice.actions.getUserSuccess(response.data));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error));
+    toast.error(error.message);
+  }
+};
+export const searchUser = (searchTerm) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    // Appending the searchTerm as a query parameter (e.g. ?name=a or ?email=a)
+    const response = await apiService.get(`/users/invite?name=${searchTerm}`);
+    dispatch(slice.actions.getUserSearchSuccess(response.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
     toast.error(error.message);
